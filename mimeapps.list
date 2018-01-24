@@ -1,0 +1,4 @@
+[Added Associations]
+image/jpeg=ristretto.desktop;
+application/x-bittorrent=transmission-qt.desktop;
+video/mp4=vlc.desktop;

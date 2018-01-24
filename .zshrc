@@ -2,7 +2,6 @@
 autoload -U compinit
 compinit
 
-
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BNo matches found%b'
 zstyle ':completion:*' use-cache on
@@ -14,7 +13,7 @@ fpath=(~/.zsh/functions $fpath)
 
 autoload -U promptinit
 promptinit
-prompt nabos
+prompt adam2
 
 autoload -U bashcompinit
 bashcompinit
@@ -91,60 +90,8 @@ ssh() {
     settitle $(hostname)
 }
 
-AddYear() {
-    mv $1 "$2 - $1"
-}
-
-FlacToOpus() {
-    find -type f -name "*.flac" -print0 | while read -d $'\0' a; do
-        opusenc --bitrate 192 "$a" "${a[@]/%flac/opus}"
-    done
-}
-
-MergetoMKV() {
-    mkvmerge -o "tmp_$1" $1.*
-    rm $1.*
-    mv "tmp_$1" "$1.mkv"
-}
-
-darkvador() {
-    A="440"
-    Ab="415.3"
-    F="349.2"
-    C="523.2"
-    E="659.3"
-    HF="698.5"
-
-    beep -f $A -l 600; sleep 0.1
-    beep -f $A -l 600; sleep 0.1
-    beep -f $A -l 600; sleep 0.1
-    beep -f $F -l 450; sleep 0.1
-    beep -f $C -l 150; sleep 0.1
-    beep -f $A -l 600; sleep 0.1
-    beep -f $F -l 450; sleep 0.1
-    beep -f $C -l 150; sleep 0.1
-    beep -f $A -l 1200; sleep 0.1
-
-    beep -f $E -l 600; sleep 0.1
-    beep -f $E -l 600; sleep 0.1
-    beep -f $E -l 600; sleep 0.1
-    beep -f $HF -l 450; sleep 0.1
-    beep -f $C -l 150; sleep 0.1
-    beep -f $Ab -l 600; sleep 0.1
-    beep -f $F -l 450; sleep 0.1
-    beep -f $C -l 150; sleep 0.1
-    beep -f $A -l 1200; sleep 0.1
-}
-
-lock () {
-    i3lock -c 000000
-    xset dpms force off
-}
-
 _script()
 {
-
-
 
   local cur
   COMPREPLY=()
