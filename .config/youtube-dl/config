@@ -1,4 +1,6 @@
 -x
+-i
+--audio-quality 0
 --audio-format mp3
 --output "%(title)s.%(ext)s"
 --add-metadata
