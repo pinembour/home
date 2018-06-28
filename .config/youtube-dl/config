@@ -5,3 +5,4 @@
 --output "%(title)s.%(ext)s"
 --add-metadata
 --download-archive archive
+-i

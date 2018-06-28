@@ -5,28 +5,35 @@
 " Released under the Beer License - 2010:2012
 
 call plug#begin('~/.vim/plugged')
+"Plug 'wombat256.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'ervandew/supertab'
 Plug 'jiangmiao/auto-pairs'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'osyo-manga/vim-over'
 Plug 'vim-scripts/nginx.vim'
+Plug 'osyo-manga/vim-over'
 Plug 'lepture/vim-jinja'
 Plug 'SirVer/ultisnips' "Both snippet plugins are needed for them to work
 Plug 'honza/vim-snippets'
+Plug 'michamos/vim-bepo'
 Plug 'vim-latex/vim-latex'
+Plug 'nvie/vim-flake8'
+Plug 'kien/ctrlp.vim'
+Plug 'Shougo/neocomplete'
 call plug#end()
 
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+let g:flake8_show_in_file="1"
+
 "GENERAL
     set nocompatible            " vim, and not vi
     set history=128             " keep 128 lines of history
     set showcmd                 " show incomplete commands
-    colorscheme wombat256mod	" colorsheme : wombat256
+    "colorscheme wombat256mod	" colorsheme : wombat256
     set background=dark
     set nomodeline              " modeline are for pussies
     set textwidth=120           " max number of characters on a single line
@@ -207,6 +214,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     let period = 2551443
     let phase = (time - offset) % period
     let phase = phase / fullday
+
+    hi Normal guibg=NONE ctermbg=NONE
+    hi NonText guibg=NONE ctermbg=NONE
 
 
 " USEFUL FUNCTIONS
