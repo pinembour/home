@@ -20,7 +20,7 @@ Plug 'tpope/vim-surround'
 Plug 'Raimondi/delimitMate'
 Plug 'tmhedberg/SimpylFold'
 Plug 'Konfekt/FastFold'
-Plug 'SirVer/ultisnips' "Both snippet plugins are needed for them to work
+"Plug 'SirVer/ultisnips' "Both snippet plugins are needed for them to work
 Plug 'honza/vim-snippets'
 
 Plug 'michamos/vim-bepo'

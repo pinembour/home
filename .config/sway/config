@@ -209,7 +209,7 @@ bindsym $mod+r mode "resize"
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    status_command i3status
+    status_command i3blocks
     position bottom
     colors {
         statusline #ffffff
@@ -218,20 +218,21 @@ bar {
     }
 }
 
-new_window none
-
+new_window pixel 1
+border pixel 1
+default_border pixel 10
 #
 # Personal stuff
 #
 gaps inner 10
-
-bindsym $mod+l exec "/home/pinembour/.config/sway/lock.sh"
-bindsym XF86KbdBrightnessDown exec "/usr/local/share/kbd_backlight" down
-bindsym XF86KbdBrightnessUp exec "/usr/local/share/kbd_backlight" up
-bindsym XF86MonBrightnessDown exec "/usr/bin/brightness.sh" -10
-bindsym XF86MonBrightnessUp exec "/usr/bin/brightness.sh" +10
+exec swaymsg input 1:1:AT_Translated_Set_2_keyboard xkb_layout fr
+bindsym $mod+l exec swaylock -i /home/pinembour/.config/sway/wall.jpg 
+bindsym XF86KbdBrightnessDown exec asus-kbd-backlight down
+bindsym XF86KbdBrightnessUp exec asus-kbd-backlight up
+bindsym XF86MonBrightnessDown exec tee /sys/class/backlight/intel_backlight/brightness <<< $((`cat /sys/class/backlight/intel_backlight/brightness` - 46))
+bindsym XF86MonBrightnessUp exec tee /sys/class/backlight/intel_backlight/brightness <<< $((`cat /sys/class/backlight/intel_backlight/brightness` + 46))
 bindsym XF86AudioMute exec amixer sset Master toggle
 bindsym XF86AudioLowerVolume exec amixer set Master 5%- unmute
-bindsym XF86AudioRaiseVolume exec  amixer set Master 5%+ unmute
+bindsym XF86AudioRaiseVolume exec amixer set Master 5%+ unmute
 
 include /etc/sway/config.d/*
