@@ -1,0 +1,4 @@
+export LANG="en_US.UTF-8"
+export EDITOR=nvim
+(cat ~/.cache/wal/sequences &)
+ranger

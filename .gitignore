@@ -1,0 +1,15 @@
+*
+
+!.gitignore
+!.Xressources
+!*/.config/fish/*
+!*/.config/nvim/*
+!*/.config/redshift/redshift.conf
+!*/.config/scripts/*
+!*/.config/sway/*
+!*/.config/termite/*
+!*/.config/wal/*
+!*/.config/waybar/*
+!.face
+!.face.icon
+!.ssh/config

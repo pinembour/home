@@ -1,6 +1,35 @@
-# Default config for sway
-#
-# Read `man 5 sway` for a complete reference.
+# Pinembour's Sway config
+
+# Import colors from pywal 
+# This will allow $color# in this config 
+include "$HOME/.cache/wal/colors-sway"
+
+# Apply pywal gtk themes, this requires pywal to be run as: (wal -i #IMAGE -g) 
+#exec gsettings set org.gnome.desktop.interface gtk-theme FlatColor
+
+# Set Decorations 		border		background	text		indicator	child border
+client.focused 			$color12 	#080808 	$color9 	$color3 	$color12
+client.focused_inactive		#000000 	#000000 	$color9 	$color3 	#000000
+client.urgent 			$color4 	#080808 	$color9 	$color3 	#080808
+default_border pixel 3
+gaps outer 18
+gaps inner 10
+smart_borders on
+
+# Autostart with Sway
+exec wal -i "/home/pinembour/Téléchargements/ColdWarm.jpg" -n
+exec wal -R
+exec mako
+exec redshift
+
+
+# GTK is stupid and wants its config from gsettings and not from its own config file :
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'Arc-Dark'
+    gsettings set $gnome-schema icon-theme 'breeze-dark'
+    #gsettings set $gnome-schema cursor-theme 'Your cursor Theme'
+}
 
 ### Variables
 #
@@ -12,46 +41,79 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term terminator
+set $term termite
 # Your preferred application launcher
-set $menu j4-dmenu-desktop --no-generic --term=termite --dmenu="dmenu -i -b -fn 'RobotoCondensed-11.5' -sb '#b8bb26' -nb '#303030' -nf '#ebdbb2' -sf '#1f1f1f'"
+# Note: it's recommended that you pass the final command to sway
+set $menu SHELL=/bin/sh j4-dmenu-desktop --dmenu="bemenu -b -i" --term=termite
 
-set_from_resource $base00 color0  #000000
-set_from_resource $base01 color18 #000000
-set_from_resource $base02 color19 #000000
-set_from_resource $base03 color8  #000000
-set_from_resource $base04 color20 #000000
-set_from_resource $base05 color7  #000000
-set_from_resource $base06 color21 #000000
-set_from_resource $base07 color15 #000000
-set_from_resource $base08 color1  #000000
-set_from_resource $base09 color16 #000000
-set_from_resource $base0A color11 #000000
-set_from_resource $base0B color2  #000000
-set_from_resource $base0C color14 #000000
-set_from_resource $base0D color12 #000000
-set_from_resource $base0E color5  #000000
-set_from_resource $base0F color17 #000000
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg $wallpaper fill
 
-#                       class   border  backgr. text indicator
-client.focused          $base05 $base11 $base00 $base05
-client.focused_inactive $base03 $base0C $base05 $base03
-client.unfocused        $base03 $base0C $base05 $base00
-client.urgent           $base01 $base01 $base05 $base00
+# TV configuration
+output "HDMI-A-1" {
+	mode 1920x1080@60Hz
+	scale 1.2
+}
 
+# Workspaces configuration
+workspace 1 output eDP-1
+workspace 2 output eDP-1
+workspace 3 output eDP-1
+workspace 4 output eDP-1
+workspace 5 output eDP-1
+workspace 6 output eDP-1
+workspace 7 output eDP-1
+workspace 8 output eDP-1
+workspace 9 output HDMI-A-1
+workspace 10 output HDMI-A-1
 
-font pango:scientifica 8## Output configuration
+### Idle configuration
+#
+# Example configuration:
+exec swayidle -w \
+	timeout 300 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; do sleep 1m; done; swaylock-blur --blur-sigma 60 -- -f' \
+	timeout 360 'while [ $( pactl list sinks | grep RUNNING | wc -l) ]; do sleep 2m; done; systemctl suspend' \
+	resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock-blur --blur-sigma 60 -- -f' 
+#
+# When no audio is playing, this will turn off your screen after 300 seconds of inactivity, then suspend
+# your pc after another 60 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
 
-new_window none
-new_float none
+### Input configuration
+#
+    input "1:1:AT_Translated_Set_2_keyboard" {
+    	xkb_layout fr,fr
+	xkb_variant azerty,bepo
+	xkb_options grp_led:caps,grp:alt_shift_toggle
+	xkb_numlock enabled
+    }  
+
+    input "1267:5:Elan_Touchpad" {
+    	drag enabled
+    	tap enabled
+	natural_scroll enabled
+	scroll_factor 0.5
+    }
+    
 ### Key bindings
 #
 # Basics:
+#
+# screenshot capture
+    bindsym Print exec --no-startup-id grim-wrapper 
+    bindsym Shift+Print exec --no-startup-id "grim-wrapper -s"
+    bindsym Control+Print exec --no-startup-id "grim-wrapper -s"
     # start a terminal
     bindsym $mod+Return exec $term
 
     # kill focused window
     bindsym $mod+Shift+q kill
+
+    # lock screen
+    bindsym $mod+l exec swaylock-blur --blur-sigma 60 -- -f
 
     # start your launcher
     bindsym $mod+d exec $menu
@@ -61,24 +123,32 @@ new_float none
     # Despite the name, also works for non-floating windows.
     # Change normal to inverse to use left mouse button for resizing and right
     # mouse button for dragging.
-    #floating_modifier $mod
+    floating_modifier $mod normal
 
     # reload the configuration file
     bindsym $mod+Shift+c reload
 
-    # exit sway (logs you out of your wayland session)
-    bindsym $mod+Shift+e exit
+    # exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
     # Move your focus around
-    bindsym $mod+left focus left
-    bindsym $mod+down focus down
-    bindsym $mod+up focus up
-    bindsym $mod+right focus right
+    #bindsym $mod+$left focus left
+    #bindsym $mod+$down focus down
+    #bindsym $mod+$up focus up
+    #bindsym $mod+$right focus right
     # or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
 
     # _move_ the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
     # ditto, with arrow keys
     bindsym $mod+Shift+Left move left
     bindsym $mod+Shift+Down move down
@@ -87,30 +157,28 @@ new_float none
 #
 # Workspaces:
 #
-    # switch to workspace
-    bindsym $mod+1 workspace 1
-    bindsym $mod+2 workspace 2
-    bindsym $mod+3 workspace 3
-    bindsym $mod+4 workspace 4
-    bindsym $mod+5 workspace 5
-    bindsym $mod+6 workspace 6
-    bindsym $mod+7 workspace 7
-    bindsym $mod+8 workspace 8
-    bindsym $mod+9 workspace 9
-    bindsym $mod+0 workspace 10
-
-    # move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace 1
-    bindsym $mod+Shift+2 move container to workspace 2
-    bindsym $mod+Shift+3 move container to workspace 3
-    bindsym $mod+Shift+4 move container to workspace 4
-    bindsym $mod+Shift+5 move container to workspace 5
-    bindsym $mod+Shift+6 move container to workspace 6
-    bindsym $mod+Shift+7 move container to workspace 7
-    bindsym $mod+Shift+8 move container to workspace 8
-    bindsym $mod+Shift+9 move container to workspace 9
-    bindsym $mod+Shift+0 move container to workspace 10
-
+    # switch to workspace (Azerty config)
+    bindsym $mod+ampersand workspace 1
+    bindsym $mod+eacute workspace 2
+    bindsym $mod+quotedbl workspace 3
+    bindsym $mod+apostrophe workspace 4
+    bindsym $mod+parenleft workspace 5
+    bindsym $mod+minus workspace 6
+    bindsym $mod+egrave workspace 7
+    bindsym $mod+underscore workspace 8
+    bindsym $mod+ccedilla workspace 9
+    bindsym $mod+agrave workspace 10
+    # move focused container to workspace (Same, azerty config)
+    bindsym $mod+Shift+ampersand move container to workspace 1
+    bindsym $mod+Shift+eacute move container to workspace 2
+    bindsym $mod+Shift+quotedbl move container to workspace 3
+    bindsym $mod+Shift+apostrophe move container to workspace 4
+    bindsym $mod+Shift+parenleft move container to workspace 5
+    bindsym $mod+Shift+minus move container to workspace 6
+    bindsym $mod+Shift+egrave move container to workspace 7
+    bindsym $mod+Shift+underscore move container to workspace 8
+    bindsym $mod+Shift+ccedilla move container to workspace 9
+    bindsym $mod+Shift+agrave move container to workspace 10
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -145,11 +213,11 @@ new_float none
     # You can send windows there and get them back later.
 
     # Move the currently focused window to the scratchpad
-    #bindsym $mod+Shift+backspace move scratchpad
+    bindsym $mod+Shift+comma move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    #bindsym $mod+backspace scratchpad show
+    bindsym $mod+comma scratchpad show
 #
 # Resizing containers:
 #
@@ -157,17 +225,17 @@ mode "resize" {
     # left will shrink the containers width
     # right will grow the containers width
     # up will shrink the containers height
-    # down will grow the containers heigh
-    bindsym $left resize shrink width 10 px or 10 ppt
-    bindsym $down resize grow height 10 px or 10 ppt
-    bindsym $up resize shrink height 10 px or 10 ppt
-    bindsym $right resize grow width 10 px or 10 ppt
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
 
     # ditto, with arrow keys
-    bindsym Left resize shrink width 10 px or 10 ppt
-    bindsym Down resize grow height 10 px or 10 ppt
-    bindsym Up resize shrink height 10 px or 10 ppt
-    bindsym Right resize grow width 10 px or 10 ppt
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
 
     # return to default mode
     bindsym Return mode "default"
@@ -175,28 +243,17 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessUp exec light -A 10
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioLowerVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ -5%)
+bindsym XF86AudioRaiseVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%)
+bindsym XF86TouchpadToggle exec [ $( pactl list sinks | grep hdmi | wc -l ) -gt 1 ] && pactl set-card-profile 0 output:analog-stereo || pactl set-card-profile 0 output:hdmi-stereo-extra1 
+
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-exec --no-startup-id xrdb /home/pinembour/.Xressources
-exec --no-startup-id nitrogen --restore
-exec_always --no-startup-id "$HOME/.config/i3/startup"
-exec --no-startup-id compton
-#
-# Personal stuff
-#
-gaps inner 10
-gaps outer 20
-
-bindsym $mod+Shift+l exec "i3lock-wrapper"
-bindsym $mod+Shift+s exec "i3lock-wrapper && systemctl hybrid-sleep"
-bindsym XF86KbdBrightnessDown exec "asus-kbd-backlight down"
-bindsym XF86KbdBrightnessUp exec "asus-kbd-backlight up"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
-bindsym XF86AudioMute exec amixer sset Master toggle
-bindsym XF86AudioLowerVolume exec amixer set Master 5%- unmute
-bindsym XF86AudioRaiseVolume exec  amixer set Master 5%+ unmute
-
-bindsym $mod+Shift+w exec "sudo ip link set dev eth0 up && sudo ip a a dev eth0 10.20.0.121/21 && sudo ip r a default via 10.20.0.130"
+bar {
+    swaybar_command waybar
+}
