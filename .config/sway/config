@@ -72,10 +72,9 @@ workspace 10 output HDMI-A-1
 ### Idle configuration
 #
 # Example configuration:
-exec swayidle -w \
-	timeout 300 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; exit 1; done; swaylock-blur --blur-sigma 60 -- -f' \
-	timeout 360 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; exit 1; done; systemctl suspend' \
-	resume 'swaymsg "output * dpms on"' \
+exec swayidle \
+	timeout 180 ~/.config/sway/idle/lock.sh \
+	timeout 240 ~/.config/sway/idle/suspend.sh \
 	before-sleep 'swaylock-blur --blur-sigma 60 -- -f' 
 #
 # When no audio is playing, this will turn off your screen after 300 seconds of inactivity, then suspend

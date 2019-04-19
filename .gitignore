@@ -3,12 +3,14 @@
 !.gitignore
 !.Xressources
 !*/.config/fish/*
+!*/.config/fish/conf.d/*
+!*/.config/fish/functions/*
 !*/.config/nvim/*
 !*/.config/redshift/redshift.conf
 !*/.config/scripts/*
 !*/.config/sway/*
+!*/.config/sway/idle/*
 !*/.config/termite/*
-!*/.config/wal/*
 !*/.config/waybar/*
 !.face
 !.face.icon
