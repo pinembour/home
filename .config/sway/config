@@ -11,13 +11,12 @@ include "$HOME/.cache/wal/colors-sway"
 client.focused 			$color12 	#080808 	$color9 	$color3 	$color12
 client.focused_inactive		#000000 	#000000 	$color9 	$color3 	#000000
 client.urgent 			$color4 	#080808 	$color9 	$color3 	#080808
-default_border pixel 3
+default_border pixel 7
 gaps outer 18
 gaps inner 10
 smart_borders on
 
 # Autostart with Sway
-exec wal -i "/home/pinembour/Téléchargements/ColdWarm.jpg" -n
 exec wal -R
 exec mako
 exec redshift
@@ -74,8 +73,8 @@ workspace 10 output HDMI-A-1
 #
 # Example configuration:
 exec swayidle -w \
-	timeout 300 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; do sleep 1m; done; swaylock-blur --blur-sigma 60 -- -f' \
-	timeout 360 'while [ $( pactl list sinks | grep RUNNING | wc -l) ]; do sleep 2m; done; systemctl suspend' \
+	timeout 300 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; exit 1; done; swaylock-blur --blur-sigma 60 -- -f' \
+	timeout 360 'while [ $( pactl list sinks | grep RUNNING | wc -l) = 1 ]; exit 1; done; systemctl suspend' \
 	resume 'swaymsg "output * dpms on"' \
 	before-sleep 'swaylock-blur --blur-sigma 60 -- -f' 
 #
@@ -250,6 +249,8 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioLowerVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ -5%)
 bindsym XF86AudioRaiseVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%)
 bindsym XF86TouchpadToggle exec [ $( pactl list sinks | grep hdmi | wc -l ) -gt 1 ] && pactl set-card-profile 0 output:analog-stereo || pactl set-card-profile 0 output:hdmi-stereo-extra1 
+
+for_window [title="cava"] border pixel 0 ; floating enable ; move down 450 ; resize set 1920 px ; resize set height 150
 
 #
 # Status Bar:
