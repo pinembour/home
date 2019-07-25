@@ -4,6 +4,7 @@ let $packpath = $runtimepath
 " enable word wrapping bitch
 set formatoptions=l
 set lbr
+set undofile
 " enable line number
 set number relativenumber
 
@@ -14,6 +15,8 @@ syntax on
 
 " spellcheck to f6
 map <F6> :setlocal spell! spelllang-en_us<CR>
+
+
 
 " neovim remote servername
 let g:vimtex_compiler_progname = 'nvr'

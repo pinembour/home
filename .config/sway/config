@@ -8,20 +8,25 @@ include "$HOME/.cache/wal/colors-sway"
 #exec gsettings set org.gnome.desktop.interface gtk-theme FlatColor
 
 # Set Decorations 		border		background	text		indicator	child border
-client.focused 			$color12 	#080808 	$color9 	$color3 	$color12
-client.focused_inactive		#000000 	#000000 	$color9 	$color3 	#000000
-client.urgent 			$color4 	#080808 	$color9 	$color3 	#080808
+client.focused 			$color0 	#080808 	$color9 	$color3 	$color12
+client.focused_inactive		$color0 	#080808 	$color9 	$color3 	$color0
+client.unfocused		$color0 	#080808 	$color9 	$color3 	$color0
+client.urgent 			$color4 	#080808 	$color9 	$color3 	$color0
+
 default_border pixel 7
 gaps outer 18
 gaps inner 10
-smart_borders on
+#smart_borders on
 
 # Autostart with Sway
-exec wal -R
+#exec wal -R
 exec mako
 exec redshift
 exec nm-applet --indicator
-
+exec ssh-agent
+exec /usr/lib/kdeconnectd
+exec indicator-kdeconnect
+exec "~/.config/sway/tray.sh"
 
 # GTK is stupid and wants its config from gsettings and not from its own config file :
 set $gnome-schema org.gnome.desktop.interface
@@ -49,7 +54,7 @@ set $menu SHELL=/bin/sh BEMENU_BACKEND=wayland j4-dmenu-desktop --dmenu="bemenu 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg $wallpaper fill
+exec swaybg -i $wallpaper -m fill
 
 # TV configuration
 output "HDMI-A-1" {
@@ -73,8 +78,8 @@ workspace 10 output HDMI-A-1
 #
 # Example configuration:
 exec swayidle \
-	timeout 180 ~/.config/sway/idle/lock.sh \
-	timeout 240 ~/.config/sway/idle/suspend.sh \
+	timeout 180 "~/.config/sway/idle/lock.sh" \
+	timeout 240 "~/.config/sway/idle/suspend.sh" \
 	before-sleep 'swaylock-blur --blur-sigma 60 -- -f' 
 #
 # When no audio is playing, this will turn off your screen after 300 seconds of inactivity, then suspend
@@ -249,8 +254,11 @@ bindsym XF86AudioLowerVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl
 bindsym XF86AudioRaiseVolume exec (pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ +5%)
 bindsym XF86TouchpadToggle exec [ $( pactl list sinks | grep hdmi | wc -l ) -gt 1 ] && pactl set-card-profile 0 output:analog-stereo || pactl set-card-profile 0 output:hdmi-stereo-extra1 
 
-for_window [title="cava"] border pixel 0 ; floating enable ; move down 450 ; resize set 1920 px ; resize set height 150
-
+for_window [app_id="termite"] border pixel 0 
+#for_window [title="cava"] border pixel 0 ; floating enable ; move down 450 ; resize set 1920 px ; resize set height 150
+for_window [app_id="waybar" floating] {
+  move position 5000 5000
+}
 #
 # Status Bar:
 #
