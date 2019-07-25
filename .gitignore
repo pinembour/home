@@ -2,6 +2,7 @@
 
 !.gitignore
 !.Xressources
+!*/.config/i3/*
 !*/.config/fish/*
 !*/.config/fish/conf.d/*
 !*/.config/fish/functions/*
