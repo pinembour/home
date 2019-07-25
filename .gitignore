@@ -3,6 +3,8 @@
 !.gitignore
 !.Xressources
 !*/.config/i3/*
+!*/.config/polybar/*
+!*/.config/compton.conf
 !*/.config/fish/*
 !*/.config/fish/conf.d/*
 !*/.config/fish/functions/*
