@@ -168,7 +168,7 @@ Plug 'lervag/vimtex'
 Plug 'scrooloose/nerdtree'
 
 "Bottom Bar
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 
 "Snips
 Plug 'SirVer/ultisnips'
